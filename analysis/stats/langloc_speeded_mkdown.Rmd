@@ -1,0 +1,541 @@
+---
+title: "langloc_speeded_stats"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(MuMIn)
+library(xtable)
+options(xtable.floating = TRUE)
+```
+
+## Lang Region Results
+
+### Fig 2: LH Lang region results
+
+#### Effect size ~ condition + version + (1|participant) + (1|fROI) 
+```{r Fig 1 (a)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition != "S-N" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Standard vs Speeded Without Interaction (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/01LH_lang_normal_vs_speeded.tex")
+
+```
+
+#### Effect size ~ condition + version + condition:version + (1|participant) + (1|fROI)
+
+```{r Fig 1 (b)}
+lme <- EffectSize ~ 1 + Condition + Version + Condition:Version + (1|UID) + (1|ROI)
+model_2 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_2)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_2)
+
+caption_text = paste('Standard vs Speeded With Interaction (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/02LH_lang_normal_vs_speeded_interaction.tex")
+
+lme4:::anova.merMod(model_1, model_2)
+```
+
+#### Effect size delta ~  version + (1|participant) + (1|fROI)
+```{r Fig 1 (c)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "S-N" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+
+caption_text = paste('Standard vs Speeded S-N (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/03LH_lang_normal_vs_speeded_S-N.tex")
+
+```
+
+#### Effect size sentences ~  version + (1|participant) + (1|fROI)
+
+```{r Fig 1 (d)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition =="S" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded S (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/04LH_lang_normal_vs_speeded_S.tex")
+
+```
+
+#### Effect size nonwords ~  version + (1|participant) + (1|fROI)
+
+```{r Fig 1 (e)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition =="N" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded N (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/05LH_lang_normal_vs_speeded_N.tex")
+
+```
+
+### Fig 3: LH Lang H-E Results 
+
+#### Effect size H ~ version + (1|participant) + (1|fROI)
+
+```{r Fig 2 (C-D pt2)}
+data <- read.csv("../data/mROI_lang_H-E.csv", header=TRUE)
+data <- subset(data, (Condition =="H" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded H (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/07LH_lang_normal_vs_speeded_H.tex")
+
+```
+
+#### Effect size E ~ version + (1|participant) + (1|fROI)
+
+```{r Fig 2 (C-D pt3)}
+data <- read.csv("../data/mROI_lang_H-E.csv", header=TRUE)
+data <- subset(data, (Condition =="E" & Hemisphere == "LH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded E (LHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/08LH_lang_normal_vs_speeded_E.tex")
+
+```
+
+### SI (1B): RH Lang region
+
+#### Effect size ~ condition + version + (1|participant) + (1|fROI) 
+```{r SI 1B (a)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition != "S-N" & Hemisphere == "RH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Standard vs Speeded Without Interaction (RHLang), R-Squared = ',round(rsq_value[2], digits =5))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/09RH_lang_normal_vs_speeded.tex")
+
+```
+
+#### Effect size ~ condition + version + condition:version + (1|participant) + (1|fROI)
+
+```{r SI 1B (b)}
+lme <- EffectSize ~ 1 + Condition + Version + Condition:Version + (1|UID) + (1|ROI)
+model_2 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_2)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_2)
+
+caption_text = paste('Standard vs Speeded With Interaction (RHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/10RH_lang_normal_vs_speeded_interaction.tex")
+
+lme4:::anova.merMod(model_1, model_2)
+```
+
+#### Effect size delta ~  version + (1|participant) + (1|fROI)
+```{r SI 1B (c)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "S-N" & Hemisphere == "RH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+
+caption_text = paste('Standard vs Speeded S-N (RHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/11RH_lang_normal_vs_speeded_S-N.tex")
+```
+
+#### Effect size sentences ~  version + (1|participant) + (1|fROI)
+
+```{r SI 1B (d)}
+
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "S" & Hemisphere == "RH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded S (RHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/12RH_lang_normal_vs_speeded_S.tex")
+
+```
+
+#### Effect size nonwords ~  version + (1|participant) + (1|fROI)
+
+```{r SI 1B (e)}
+data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "N" & Hemisphere == "RH"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+caption_text = paste('Standard vs Speeded N (RHLang), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/13RH_lang_normal_vs_speeded_N.tex")
+
+
+```
+
+## MD Region
+
+### MD S-N Results 
+
+#### Effect size ~ condition + version + (1|participant) + (1|fROI) 
+```{r Result MD SN}
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition != "S-N"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary_1 = summary(model_1)
+print(summary_1, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Standard vs. Speeded Without Interaction (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_1[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/14MD_normal_vs_speeded.tex")
+```
+
+#### Effect size ~ condition + version + condition:version + (1|participant) + (1|fROI)
+
+```{r Result MD SN Interaction}
+lme <- EffectSize ~ 1 + Condition + Version + Condition:Version + (1|UID) + (1|ROI)
+model_2 <- lmer(lme, data=data, REML=FALSE)
+summary_2 = summary(model_2)
+print(summary_2, digits=10)
+
+rsq_value = r.squaredGLMM(model_2)
+
+caption_text = paste('Standard vs. Speeded With Interaction (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_2[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/15MD_normal_vs_speeded_interaction.tex")
+
+lme4:::anova.merMod(model_1, model_2)
+lme4:::anova.merMod(model_2, model_1)
+```
+
+
+#### Effect size only standard version ~ condition + (1|participant) + (1|fROI) 
+```{r Result MD SN only standard}
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition != "S-N" & Version == "Standard"))
+lme <- EffectSize ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary_1 = summary(model_1)
+print(summary_1, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('S-N Standard (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_1[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/16MD_normal_only.tex")
+```
+
+#### Effect size only speeded version ~ condition + (1|participant) + (1|fROI) 
+```{r Result MD SN only speeded}
+#### Effect size only speeded version ~ condition + (1|participant) + (1|fROI) 
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition != "S-N" & Version == "Speeded"))
+lme <- EffectSize ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary_1 = summary(model_1)
+print(summary_1, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('S-N Speeded (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_1[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/17MD_speeded_only.tex")
+```
+
+#### Effect size only S ~ version + (1|participant) + (1|fROI) 
+```{r Result MD only S}
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "S"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary_1 = summary(model_1)
+print(summary_1, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Standard vs. Speeded S (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_1[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/18MD_S_only.tex")
+```
+
+#### Effect size only N ~ version + (1|participant) + (1|fROI) 
+```{r Result MD only N}
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "N"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary_1 = summary(model_1)
+print(summary_1, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Standard vs. Speeded N (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary_1[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/19MD_N_only.tex")
+```
+
+#### Effect size delta ~ version + (1|participant) + (1|fROI) 
+```{r Result MD S-N delta}
+data <- read.csv("../data/mROI_MD_S-N.csv", header=TRUE)
+data <- subset(data, (Condition == "S-N"))
+data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
+lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
+model <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model)
+
+caption_text = paste('Standard vs. Speeded S-N (MD), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/20MD_normal_vs_speeded_S-N.tex")
+```
+
+## SpCorr
+
+#### Effect size (averaged across different within/between categories) ~ condition + (1|participant)
+```{r spcorr }
+data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("SpCorr", Version) & Condition == "within"))
+data$Version <- factor(data$Version, levels = c("Standard SpCorr", "Speeded SpCorr"))
+lme <- Coefficient ~ 1 + Version + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Spcorr within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/21Spcorr_averaged.tex")
+```
+
+#### Effect size (averaged across different within/between categories) ~ condition + (1|participant)
+```{r spcorr averaged}
+data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("SpCorr", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Spcorr within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/21Spcorr_averaged.tex")
+```
+
+
+#### Effect size LH wholebrain(averaged across different within/between categories) ~ condition + (1|participant)
+```{r spcorr LH wholebrain averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("SpCorr", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Spcorr within localizer vs. between localizer versions (left-hemisphere wholebrain), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/22Spcorr_LH_wholebrain_averaged.tex")
+```
+
+#### Effect size RH wholebrain (averaged across different within/between categories) ~ condition + version + (1|participant)
+```{r spcorr RH wholebrain averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "RH" & grepl("SpCorr", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Spcorr within localizer vs. between localizer versions (right-hemisphere wholebrain), R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/23Spcorr_RH_wholebrain_averaged.tex")
+```
+
+## Dice
+#### Effect size ~ condition + version + (1|participant)
+
+```{r dice70_averaged}
+data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("70", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_70percent_averaged.tex")
+```
+
+
+```{r dice80_averaged}
+data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("80", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_80percent_averaged.tex")
+```
+
+```{r dice90_averaged}
+data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("90", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_90percent_averaged.tex")
+
+```
+
+#### Dice Wholebrain 
+
+```{r dice70_wholebrain_LH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("70", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_LH_wholebrain_70percent_averaged.tex")
+```
+
+```{r dice80_wholebrain_LH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("80", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_LH_wholebrain_80percent_averaged.tex")
+```
+
+```{r dice90_wholebrain_LH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("90", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_LH_wholebrain_90percent_averaged.tex")
+
+```
+
+```{r dice70_wholebrain_RH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "RH" & grepl("Dice", Version) & grepl("70", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_RH_wholebrain_70percent_averaged.tex")
+```
+
+```{r dice80_wholebrain_RH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "RH" & grepl("Dice", Version) & grepl("80", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_RH_wholebrain_80percent_averaged.tex")
+```
+
+```{r dice90_wholebrain_RH_averaged}
+data <- read.csv("../data/spatial_corr_wholebrain.csv", header=TRUE)
+data <- subset(data, (Hemisphere == "RH" & grepl("Dice", Version) & grepl("90", Version)))
+lme <- Coefficient ~ 1 + Condition + (1|UID)
+model_1 <- lmer(lme, data=data, REML=FALSE)
+summary = summary(model_1)
+print(summary, digits=10)
+
+rsq_value = r.squaredGLMM(model_1)
+
+caption_text = paste('Dice within localizer vs. between localizer versions, R-Squared = ',round(rsq_value[2], digits =4))
+print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), caption.placement = "top", table.placement= "!htb", file = "latex_tables/34Dice_RH_wholebrain_90percent_averaged.tex")
+
+```
