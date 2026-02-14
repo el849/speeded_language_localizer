@@ -1,5 +1,5 @@
 DATADIR = "analysis/data"
-PLOTDIR = "anslysis/plots"
+PLOTDIR = "analysis/plots"
 FIRSTLEVELDIR = "analysis/data/firstlevel"
 ROIDIR = "analysis/data/roi_parcels"
 DICERESULTDIR = "analysis/dice_results"
@@ -44,6 +44,50 @@ D_ROI_ORDER = {
         "RH_supFrontal",
     ],
     "wholebrain": ["wholebrain_LH", "wholebrain_RH"],
+    "dmn": [
+        "LMedialFrontal",
+        "LPosteriorCingulate",
+        "LTPJ",
+        "LMiddleCingulate",
+        "LSTG",
+        "LAnteriorTemporal",
+        "RMedialFrontal",
+        "RPosteriorCingulate",
+        "RTPJ",
+        "RMiddleCingulate",
+        "RSTG",
+        "RAnteriorTemporal",
+    ],
+    "extendedLang": [
+        "LPostTemp",
+        "LAntTemp",
+        "LMFG",
+        "RPostTemp",
+        "RAntTemp",
+        "LIFG",
+        "RTempPole",
+        "MedSFG",
+        "",
+        "RCrusI_II_VIIb",
+        "LIFGOrb",
+        "RVIIb_VIIIa",
+        "RInfOcc",
+        "ROcc",
+        "RPostVI_CrusI",
+        "MedAntSFG",
+        "LOcc",
+        "VMFC",
+        "RLatVI",
+        "RMFG",
+        "RIFGOrb",
+        "LTempPole",
+        "LCrusI_II_VIIb",
+        "RIFG",
+        "LSupPrecuneus",
+        "LPrecuneus_PostACC",
+        "LParaHipp",
+        "LBTLA",
+    ],
 }
 
 D_COLOR_COND = {
@@ -56,7 +100,10 @@ D_COLOR_COND = {
     ],
     "MD_H-E": ["darkslategray", "paleturquoise", "darkslategray", "paleturquoise"],
     "MD_S-N": ["mediumblue", "lightsteelblue", "mediumblue", "lightsteelblue"],
+    "dmn_S-N": ["darkgreen", "lightgreen", "darkgreen", "lightgreen"],
+    "dmn_E-H": ["darkgreen", "lightgreen", "darkgreen", "lightgreen"],
     "spcorr": ["maroon", "darksalmon", "gray"],
+    "extendedLang_S-N": ["maroon", "darksalmon", "maroon", "darksalmon"],
 }
 
 FL_CONTRAST = {

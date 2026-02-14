@@ -172,7 +172,7 @@ pre code {
 <div id="effect-size-condition-version-1participant-1froi" class="section level4">
 <h4>Effect size ~ condition + version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition != &quot;S-N&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition != &quot;S-N&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
@@ -184,35 +184,35 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1621.9   1648.1   -805.0   1609.9      570 
+##   1318.4   1343.5   -653.2   1306.4      474 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -2.7505863743 -0.6000591586 -0.0922708963  0.6140648494  3.9259291590 
+## -2.5391297794 -0.6141206674 -0.0861841131  0.5547043073  3.9088335534 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.1951193820 0.4417231962
-##  ROI      (Intercept) 0.4593418342 0.6777476184
-##  Residual             0.8529822444 0.9235703787
-## Number of obs: 576, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.2645434358 0.5143378615
+##  ROI      (Intercept) 0.2855085610 0.5343300113
+##  Residual             0.7769572010 0.8814517576
+## Number of obs: 480, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df  t value
-## (Intercept)      0.29005473958   0.29854574604   7.77609919909  0.97156
-## ConditionS       1.69786865278   0.07696419822 546.96558286740 22.06050
-## VersionSpeeded   0.01092206944   0.07696419822 546.96558286740  0.14191
+## (Intercept)      0.44203940000   0.27014873285   7.58699896374  1.63628
+## ConditionS       1.89654522500   0.08046516850 451.95443971465 23.56977
+## VersionSpeeded  -0.06846346667   0.08046516850 451.95443971465 -0.85085
 ##                Pr(&gt;|t|)    
-## (Intercept)     0.36052    
+## (Intercept)     0.14247    
 ## ConditionS      &lt; 2e-16 ***
-## VersionSpeeded  0.88720    
+## VersionSpeeded  0.39531    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) CndtnS
-## ConditionS  -0.129       
-## VersionSpdd -0.129  0.000</code></pre>
+## ConditionS  -0.149       
+## VersionSpdd -0.149  0.000</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)</code></pre>
 <pre><code>## Warning: &#39;r.squaredGLMM&#39; now calculates a revised statistic. See the help page.</code></pre>
 <pre class="r"><code>caption_text = paste(&#39;Standard vs Speeded Without Interaction (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -230,38 +230,38 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1604.0   1634.5   -795.0   1590.0      569 
+##   1299.8   1329.0   -642.9   1285.8      473 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -2.7679985663 -0.6378591183 -0.0198498767  0.6001242261  3.8069018293 
+## -2.7548412137 -0.6374876469 -0.0177539679  0.5661971813  3.7842675088 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.1963850181 0.4431534927
-##  ROI      (Intercept) 0.4597137806 0.6780219617
-##  Residual             0.8224785684 0.9069060417
-## Number of obs: 576, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.2662432704 0.5159876650
+##  ROI      (Intercept) 0.2859286184 0.5347229361
+##  Residual             0.7422566616 0.8615431861
+## Number of obs: 480, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                                 Estimate     Std. Error             df  t value
-## (Intercept)                 0.4602511111   0.3008543323   8.0171016967  1.52981
-## ConditionS                  1.3574759097   0.1068799020 546.9665649776 12.70095
-## VersionSpeeded             -0.3294706736   0.1068799020 546.9665649922 -3.08263
-## ConditionS:VersionSpeeded   0.6807854861   0.1511510069 546.9665650137  4.50401
+## (Intercept)                 0.6228086250   0.2728821457   7.8948414394  2.28234
+## ConditionS                  1.5350067750   0.1112247471 451.9550159883 13.80095
+## VersionSpeeded             -0.4300019167   0.1112247471 451.9550159745 -3.86606
+## ConditionS:VersionSpeeded   0.7230769000   0.1572955458 451.9550159793  4.59693
 ##                             Pr(&gt;|t|)    
-## (Intercept)                0.1645114    
+## (Intercept)               0.05230456 .  
 ## ConditionS                &lt; 2.22e-16 ***
-## VersionSpeeded             0.0021553 ** 
-## ConditionS:VersionSpeeded 8.1566e-06 ***
+## VersionSpeeded            0.00012682 ***
+## ConditionS:VersionSpeeded 5.5719e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) CndtnS VrsnSp
-## ConditionS  -0.178              
-## VersionSpdd -0.178  0.500       
-## CndtnS:VrsS  0.126 -0.707 -0.707</code></pre>
+## ConditionS  -0.204              
+## VersionSpdd -0.204  0.500       
+## CndtnS:VrsS  0.144 -0.707 -0.707</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_2)
 
 caption_text = paste(&#39;Standard vs Speeded With Interaction (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -273,15 +273,15 @@ lme4:::anova.merMod(model_1, model_2)</code></pre>
 ## model_1: lme
 ## model_2: lme
 ##         npar    AIC    BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
-## model_1    6 1621.9 1648.1 -804.96   1609.9                         
-## model_2    7 1604.0 1634.5 -795.00   1590.0 19.919  1   8.08e-06 ***
+## model_1    6 1318.4 1343.5 -653.22   1306.4                         
+## model_2    7 1299.8 1329.0 -642.90   1285.8 20.653  1  5.506e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div id="effect-size-delta-version-1participant-1froi" class="section level4">
 <h4>Effect size delta ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition == &quot;S-N&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition == &quot;S-N&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -293,32 +293,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    713.1    731.4   -351.6    703.1      283 
+##    588.7    606.1   -289.3    578.7      235 
 ## 
 ## Scaled residuals: 
-##            Min             1Q         Median             3Q            Max 
-## -3.15338958503 -0.59534449043 -0.02423927958  0.52276686748  2.88819583798 
+##           Min            1Q        Median            3Q           Max 
+## -3.2245572851 -0.5820898964 -0.0477655670  0.4464293311  3.0848574304 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.2470310800 0.4970222128
-##  ROI      (Intercept) 0.2992439123 0.5470319116
-##  Residual             0.5403551221 0.7350885131
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.3048013606 0.5520881819
+##  ROI      (Intercept) 0.1233866935 0.3512644210
+##  Residual             0.5134416944 0.7165484592
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df t value
-## (Intercept)      1.35747593056   0.25282288893   8.95375156652 5.36928
-## VersionSpeeded   0.68078543750   0.08663101206 258.93850223104 7.85845
+## (Intercept)      1.53500679167   0.20409820227  10.98031413784 7.52092
+## VersionSpeeded   0.72307685000   0.09250600831 211.88849849929 7.81654
 ##                  Pr(&gt;|t|)    
-## (Intercept)    0.00045873 ***
-## VersionSpeeded 1.0448e-13 ***
+## (Intercept)    1.1814e-05 ***
+## VersionSpeeded 2.5070e-13 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.171</code></pre>
+## VersionSpdd -0.227</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 
 caption_text = paste(&#39;Standard vs Speeded S-N (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -327,7 +327,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-sentences-version-1participant-1froi" class="section level4">
 <h4>Effect size sentences ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition ==&quot;S&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition ==&quot;S&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -339,32 +339,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    878.2    896.5   -434.1    868.2      283 
+##    725.2    742.6   -357.6    715.2      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -2.4212415363 -0.6404493520  0.0133469912  0.5876509391  3.2739636832 
+## -2.2816139599 -0.6266443731 -0.0380250452  0.5255109436  3.2729589785 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.4067867150 0.6377983341
-##  ROI      (Intercept) 0.8955015336 0.9463094281
-##  Residual             0.9530655010 0.9762507367
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.5487154556 0.7407533028
+##  ROI      (Intercept) 0.5001137248 0.7071871922
+##  Residual             0.8898884098 0.9433389687
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                      Estimate     Std. Error             df t value  Pr(&gt;|t|)
-## (Intercept)      1.8177270208   0.4157140995   7.6417252654 4.37254 0.0026471
-## VersionSpeeded   0.3513148125   0.1150522527 258.9605460950 3.05352 0.0024975
-##                  
-## (Intercept)    **
-## VersionSpeeded **
+##                      Estimate     Std. Error             df t value   Pr(&gt;|t|)
+## (Intercept)      2.1578154000   0.3609731648   7.6997550424 5.97777 0.00038474
+## VersionSpeeded   0.2930749833   0.1217845372 211.9404458417 2.40650 0.01696377
+##                   
+## (Intercept)    ***
+## VersionSpeeded *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.138</code></pre>
+## VersionSpdd -0.169</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded S (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/04LH_lang_normal_vs_speeded_S.tex&quot;)</code></pre>
@@ -372,7 +372,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-nonwords-version-1participant-1froi" class="section level4">
 <h4>Effect size nonwords ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition ==&quot;N&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition ==&quot;N&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -384,32 +384,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    647.3    665.6   -318.7    637.3      283 
+##    528.4    545.8   -259.2    518.4      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.6177260505 -0.5749200083 -0.0910736387  0.5548952044  3.3817212400 
+## -3.6100386441 -0.6194283094 -0.1230770625  0.5842898584  3.5116934669 
 ## 
 ## Random effects:
-##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.08299929723 0.2880959861
-##  ROI      (Intercept) 0.16612806230 0.4075881037
-##  Residual             0.45928635806 0.6777066903
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance     Std.Dev.    
+##  UID      (Intercept) 0.1051480438 0.3242653909
+##  ROI      (Intercept) 0.1263748803 0.3554924477
+##  Residual             0.4254523658 0.6522670970
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df  t value
-## (Intercept)      0.46025111111   0.18529922567   8.15379803294  2.48383
-## VersionSpeeded  -0.32947067361   0.07986849939 258.89990216346 -4.12516
+## (Intercept)      0.62280862500   0.18221300980   7.39691142627  3.41803
+## VersionSpeeded  -0.43000191667   0.08420732013 211.88354105332 -5.10647
 ##                  Pr(&gt;|t|)    
-## (Intercept)      0.037352 *  
-## VersionSpeeded 4.9964e-05 ***
+## (Intercept)      0.010262 *  
+## VersionSpeeded 7.2986e-07 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.216</code></pre>
+## VersionSpdd -0.231</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded N (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/05LH_lang_normal_vs_speeded_N.tex&quot;)</code></pre>
@@ -420,7 +420,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-h-version-1participant-1froi" class="section level4">
 <h4>Effect size H ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_H-E.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition ==&quot;H&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition ==&quot;H&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -432,27 +432,27 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    841.5    859.8   -415.7    831.5      283 
+##    654.3    671.7   -322.1    644.3      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.9129769756 -0.6320463420 -0.0681856876  0.5581460617  4.0600222956 
+## -2.6283098605 -0.6848546963 -0.0400407302  0.6070719648  4.2924849707 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.5101583510 0.7142537021
-##  ROI      (Intercept) 0.2186126186 0.4675602834
-##  Residual             0.8390562772 0.9160001513
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.5217244552 0.7223049599
+##  ROI      (Intercept) 0.2686803683 0.5183438707
+##  Residual             0.6514352858 0.8071154104
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                      Estimate     Std. Error             df  t value Pr(&gt;|t|)
-## (Intercept)     -0.3850826875   0.2520293913  13.8240733651 -1.52793  0.14908
-## VersionSpeeded   0.1169830347   0.1079516531 258.9013613659  1.08366  0.27952
+## (Intercept)     -0.3829922500   0.2844349135   9.6476125335 -1.34650  0.20892
+## VersionSpeeded   0.1013878833   0.1041981514 211.9292649435  0.97303  0.33165
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.214</code></pre>
+## VersionSpdd -0.183</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded H (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/07LH_lang_normal_vs_speeded_H.tex&quot;)</code></pre>
@@ -460,7 +460,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-e-version-1participant-1froi" class="section level4">
 <h4>Effect size E ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_H-E.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition ==&quot;E&quot; &amp; Hemisphere == &quot;LH&quot;))
+data &lt;- subset(data, (Condition ==&quot;E&quot; &amp; Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -472,30 +472,30 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    588.3    606.6   -289.1    578.3      283 
+##    461.6    479.0   -225.8    451.6      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.2766439630 -0.6495365525 -0.0881113060  0.5632317537  4.0407353473 
+## -2.3641477673 -0.6558297422 -0.0670442887  0.6312268619  4.0640983234 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.24596744528 0.4959510513
-##  ROI      (Intercept) 0.04998927905 0.2235828237
-##  Residual             0.34811327838 0.5900112528
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.23009495608 0.4796821407
+##  ROI      (Intercept) 0.06203620347 0.2490706797
+##  Residual             0.29631224098 0.5443456999
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df  t value
-## (Intercept)     -0.06805165278   0.14490563614  20.17943391709 -0.46963
-## VersionSpeeded   0.11343503472   0.06953349297 258.87389709865  1.63137
+## (Intercept)     -0.05365682500   0.15640907648  13.53831149568 -0.34305
+## VersionSpeeded   0.09567680833   0.07027472767 211.89070207424  1.36147
 ##                Pr(&gt;|t|)
-## (Intercept)     0.64366
-## VersionSpeeded  0.10403
+## (Intercept)     0.73683
+## VersionSpeeded  0.17481
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.240</code></pre>
+## VersionSpdd -0.225</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded E (LHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/08LH_lang_normal_vs_speeded_E.tex&quot;)</code></pre>
@@ -506,7 +506,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-condition-version-1participant-1froi-1" class="section level4">
 <h4>Effect size ~ condition + version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition != &quot;S-N&quot; &amp; Hemisphere == &quot;RH&quot;))
+data &lt;- subset(data, (Condition != &quot;S-N&quot; &amp; Hemisphere == &quot;RH&quot; &amp; ROI != &quot;RAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
@@ -518,35 +518,35 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1340.6   1366.7   -664.3   1328.6      570 
+##   1088.9   1113.9   -538.4   1076.9      474 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -5.8894260949 -0.5886623532 -0.0658034056  0.4782474351  6.1341963454 
+## -2.2994032598 -0.6200649484 -0.0825073519  0.4417611865  6.3376188339 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.05158456016 0.2271223462
-##  ROI      (Intercept) 0.16003215697 0.4000401942
-##  Residual             0.54107586270 0.7355785904
-## Number of obs: 576, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.07046275315 0.2654482118
+##  ROI      (Intercept) 0.07680123431 0.2771303562
+##  Residual             0.50289938192 0.7091539903
+## Number of obs: 480, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                       Estimate      Std. Error              df t value Pr(&gt;|t|)
-## (Intercept)      0.09697205903   0.17787491753   7.83829554689 0.54517 0.600800
-## ConditionS       0.53940044444   0.06129821587 546.93565897699 8.79961  &lt; 2e-16
-## VersionSpeeded   0.11287388194   0.06129821587 546.93565897699 1.84139 0.066106
+##                      Estimate     Std. Error             df t value Pr(&gt;|t|)
+## (Intercept)      0.2277132229   0.1464217062   8.3594457454 1.55519  0.15689
+## ConditionS       0.6225405958   0.0647366062 451.8883113854 9.61652  &lt; 2e-16
+## VersionSpeeded   0.0473697375   0.0647366062 451.8883113854 0.73173  0.46471
 ##                   
 ## (Intercept)       
 ## ConditionS     ***
-## VersionSpeeded .  
+## VersionSpeeded    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) CndtnS
-## ConditionS  -0.172       
-## VersionSpdd -0.172  0.000</code></pre>
+## ConditionS  -0.221       
+## VersionSpdd -0.221  0.000</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Standard vs Speeded Without Interaction (RHLang), R-Squared = &#39;,round(rsq_value[2], digits =5))
@@ -564,38 +564,38 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   1339.0   1369.5   -662.5   1325.0      569 
+##   1087.0   1116.2   -536.5   1073.0      473 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -5.9870533080 -0.6084697468 -0.1018566721  0.4645578299  6.0746937858 
+## -2.2208310473 -0.6062266419 -0.0789686983  0.4379555532  6.2737902655 
 ## 
 ## Random effects:
-##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.0517310075 0.2274445152
-##  ROI      (Intercept) 0.1600748900 0.4000936015
-##  Residual             0.5375692624 0.7331911500
-## Number of obs: 576, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance      Std.Dev.    
+##  UID      (Intercept) 0.07067703460 0.2658515274
+##  ROI      (Intercept) 0.07685228216 0.2772224417
+##  Residual             0.49862726960 0.7061354471
+## Number of obs: 480, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                                   Estimate       Std. Error               df
-## (Intercept)                 0.154674347222   0.180465306519   8.303958634434
-## ConditionS                  0.423995868056   0.086407405675 546.936174587253
-## VersionSpeeded             -0.002530694444   0.086407405675 546.936174585526
-## ConditionS:VersionSpeeded   0.230809152778   0.122198524995 546.936174560286
+##                                  Estimate      Std. Error              df
+## (Intercept)                 0.29113129167   0.14990183495   9.18026341229
+## ConditionS                  0.49570445833   0.09116169422 451.88939049806
+## VersionSpeeded             -0.07946640000   0.09116169422 451.88939049928
+## ConditionS:VersionSpeeded   0.25367227500   0.12892210434 451.88939047905
 ##                            t value   Pr(&gt;|t|)    
-## (Intercept)                0.85709   0.415446    
-## ConditionS                 4.90694 1.2224e-06 ***
-## VersionSpeeded            -0.02929   0.976646    
-## ConditionS:VersionSpeeded  1.88880   0.059447 .  
+## (Intercept)                1.94215   0.083386 .  
+## ConditionS                 5.43764 8.8555e-08 ***
+## VersionSpeeded            -0.87171   0.383830    
+## ConditionS:VersionSpeeded  1.96764   0.049721 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr) CndtnS VrsnSp
-## ConditionS  -0.239              
-## VersionSpdd -0.239  0.500       
-## CndtnS:VrsS  0.169 -0.707 -0.707</code></pre>
+## ConditionS  -0.304              
+## VersionSpdd -0.304  0.500       
+## CndtnS:VrsS  0.215 -0.707 -0.707</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_2)
 
 caption_text = paste(&#39;Standard vs Speeded With Interaction (RHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -606,16 +606,16 @@ lme4:::anova.merMod(model_1, model_2)</code></pre>
 ## Models:
 ## model_1: lme
 ## model_2: lme
-##         npar    AIC    BIC  logLik deviance Chisq Df Pr(&gt;Chisq)  
-## model_1    6 1340.6 1366.7 -664.29   1328.6                      
-## model_2    7 1339.0 1369.5 -662.51   1325.0 3.556  1    0.05933 .
+##         npar    AIC    BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)  
+## model_1    6 1088.9 1113.9 -538.44   1076.9                       
+## model_2    7 1087.0 1116.2 -536.51   1073.0 3.8551  1    0.04959 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 <div id="effect-size-delta-version-1participant-1froi-1" class="section level4">
 <h4>Effect size delta ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition == &quot;S-N&quot; &amp; Hemisphere == &quot;RH&quot;))
+data &lt;- subset(data, (Condition == &quot;S-N&quot; &amp; Hemisphere == &quot;RH&quot; &amp; ROI != &quot;RAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -627,32 +627,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    501.5    519.8   -245.7    491.5      283 
+##    424.0    441.4   -207.0    414.0      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -1.9256762729 -0.5994280229 -0.1491021958  0.4337716407  5.5001855843 
+## -1.9484990526 -0.6319807490 -0.1029383600  0.4849195479  5.2691050623 
 ## 
 ## Random effects:
-##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.09135232863 0.3022454774
-##  ROI      (Intercept) 0.05086806769 0.2255395036
-##  Residual             0.26975762520 0.5193819646
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance     Std.Dev.    
+##  UID      (Intercept) 0.1154343843 0.3397563602
+##  ROI      (Intercept) 0.0198918372 0.1410384245
+##  Residual             0.2708456964 0.5204283778
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df t value
-## (Intercept)      0.42399586806   0.11898602922  12.44591786978 3.56341
-## VersionSpeeded   0.23080916667   0.06120975154 258.85294385743 3.77079
+## (Intercept)      0.49570448333   0.10509605569  17.12597873477 4.71668
+## VersionSpeeded   0.25367226667   0.06718701467 211.75846495216 3.77561
 ##                  Pr(&gt;|t|)    
-## (Intercept)    0.00369423 ** 
-## VersionSpeeded 0.00020167 ***
+## (Intercept)    0.00019531 ***
+## VersionSpeeded 0.00020732 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.257</code></pre>
+## VersionSpdd -0.320</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 
 caption_text = paste(&#39;Standard vs Speeded S-N (RHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -661,7 +661,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-sentences-version-1participant-1froi-1" class="section level4">
 <h4>Effect size sentences ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition == &quot;S&quot; &amp; Hemisphere == &quot;RH&quot;))
+data &lt;- subset(data, (Condition == &quot;S&quot; &amp; Hemisphere == &quot;RH&quot; &amp; ROI != &quot;RAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -673,32 +673,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    745.8    764.1   -367.9    735.8      283 
+##    629.0    646.4   -309.5    619.0      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -2.7344576399 -0.6359096358 -0.0682441422  0.5089108396  5.5168701247 
+## -1.9711558573 -0.6157409956 -0.1466923146  0.4369622087  5.5186951895 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.08724232544 0.2953681185
-##  ROI      (Intercept) 0.23437905463 0.4841271059
-##  Residual             0.65724901527 0.8107089584
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.12716041373 0.3565955885
+##  ROI      (Intercept) 0.08710590018 0.2951370871
+##  Residual             0.66819308713 0.8174307843
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                       Estimate      Std. Error              df t value Pr(&gt;|t|)
-## (Intercept)      0.57867021528   0.21739940648   7.77826999011 2.66178 0.029446
-## VersionSpeeded   0.22827845833   0.09554296701 258.89571583062 2.38928 0.017598
-##                 
-## (Intercept)    *
-## VersionSpeeded *
+##                      Estimate     Std. Error             df t value  Pr(&gt;|t|)
+## (Intercept)      0.7868357500   0.1681897926   9.3168827594 4.67826 0.0010523
+## VersionSpeeded   0.1742058750   0.1055298605 211.7681605861 1.65077 0.1002671
+##                  
+## (Intercept)    **
+## VersionSpeeded   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.220</code></pre>
+## VersionSpdd -0.314</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded S (RHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/12RH_lang_normal_vs_speeded_S.tex&quot;)</code></pre>
@@ -706,7 +706,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-nonwords-version-1participant-1froi-1" class="section level4">
 <h4>Effect size nonwords ~ version + (1|participant) + (1|fROI)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/mROI_lang_S-N.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Condition == &quot;N&quot; &amp; Hemisphere == &quot;RH&quot;))
+data &lt;- subset(data, (Condition == &quot;N&quot; &amp; Hemisphere == &quot;RH&quot; &amp; ROI != &quot;RAngG&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard&quot;, &quot;Speeded&quot;))
 lme &lt;- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model &lt;- lmer(lme, data=data, REML=FALSE)
@@ -718,30 +718,29 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    585.1    603.4   -287.6    575.1      283 
+##    435.8    453.2   -212.9    425.8      235 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -7.1994730294 -0.4894202390  0.0371827747  0.4701935390  4.5742882212 
+## -2.6380773047 -0.5220646559 -0.0081185881  0.4537875859  5.1939810673 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.03130842993 0.1769418829
-##  ROI      (Intercept) 0.10266876593 0.3204196716
-##  Residual             0.38674900203 0.6218914713
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.03858709656 0.1964359859
+##  ROI      (Intercept) 0.06894085551 0.2625659070
+##  Residual             0.30286991416 0.5503361829
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                        Estimate       Std. Error               df  t value
-## (Intercept)      0.154674347222   0.145264365421   7.785019996405  1.06478
-## VersionSpeeded  -0.002530694444   0.073290612749 258.858788052872 -0.03453
-##                Pr(&gt;|t|)
-## (Intercept)     0.31888
-## VersionSpeeded  0.97248
+##                      Estimate     Std. Error             df  t value Pr(&gt;|t|)  
+## (Intercept)      0.2911312917   0.1338651663   7.0015577783  2.17481 0.066137 .
+## VersionSpeeded  -0.0794664000   0.0710480957 211.8417985211 -1.11849 0.264626  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VersionSpdd -0.252</code></pre>
+## VersionSpdd -0.265</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model)
 caption_text = paste(&#39;Standard vs Speeded N (RHLang), R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/13RH_lang_normal_vs_speeded_N.tex&quot;)</code></pre>
@@ -776,15 +775,15 @@ print(summary_1, digits=10)</code></pre>
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
 ##  UID      (Intercept) 0.1162277045 0.3409218452
-##  ROI      (Intercept) 0.1180900061 0.3436422647
+##  ROI      (Intercept) 0.1180900060 0.3436422646
 ##  Residual             0.4587150937 0.6772850904
 ## Number of obs: 1920, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                        Estimate       Std. Error               df  t value
-## (Intercept)       0.47511484740    0.10707036780   43.38104761628  4.43741
-## ConditionS       -0.14348841354    0.03091369349 1876.95599540202 -4.64158
-## VersionSpeeded    0.06787040312    0.03091369349 1876.95599540202  2.19548
+## (Intercept)       0.47511484740    0.10707036778   43.38104750015  4.43741
+## ConditionS       -0.14348841354    0.03091369349 1876.95599553323 -4.64158
+## VersionSpeeded    0.06787040312    0.03091369349 1876.95599553323  2.19548
 ##                  Pr(&gt;|t|)    
 ## (Intercept)    6.1526e-05 ***
 ## ConditionS     3.6970e-06 ***
@@ -817,21 +816,21 @@ print(summary_2, digits=10)</code></pre>
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.4943753284 -0.5939510945 -0.0410535184  0.5351094175  5.8343388522 
+## -3.4943753284 -0.5939510945 -0.0410535183  0.5351094174  5.8343388522 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.1162836353 0.3410038641
-##  ROI      (Intercept) 0.1181372825 0.3437110451
+##  UID      (Intercept) 0.1162836350 0.3410038636
+##  ROI      (Intercept) 0.1181372825 0.3437110450
 ##  Residual             0.4542706321 0.6739960179
 ## Number of obs: 1920, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                                   Estimate       Std. Error               df
-## (Intercept)                  0.54103009375    0.10815920095   45.17084823436
-## ConditionS                  -0.27531890625    0.04350625588 1876.95644272438
-## VersionSpeeded              -0.06396008958    0.04350625588 1876.95644272865
-## ConditionS:VersionSpeeded    0.26366098542    0.06152713711 1876.95644250240
+## (Intercept)                  0.54103009375    0.10815920086   45.17084817093
+## ConditionS                  -0.27531890625    0.04350625588 1876.95644131661
+## VersionSpeeded              -0.06396008958    0.04350625588 1876.95644130839
+## ConditionS:VersionSpeeded    0.26366098542    0.06152713711 1876.95644156582
 ##                            t value   Pr(&gt;|t|)    
 ## (Intercept)                5.00216 9.0613e-06 ***
 ## ConditionS                -6.32826 3.0928e-10 ***
@@ -889,19 +888,19 @@ print(summary_1, digits=10)</code></pre>
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.0400217304 -0.6056354408 -0.0268159965  0.4872365951  6.7482617066 
+## -3.0400217305 -0.6056354408 -0.0268159965  0.4872365950  6.7482617066 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.2115172844 0.4599100830
-##  ROI      (Intercept) 0.1234417893 0.3513428373
+##  UID      (Intercept) 0.2115172843 0.4599100829
+##  ROI      (Intercept) 0.1234417894 0.3513428373
 ##  Residual             0.3193603740 0.5651197873
 ## Number of obs: 960, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                    Estimate      Std. Error              df  t value   Pr(&gt;|t|)
-## (Intercept)   0.54103009375   0.12510253300  42.78260169947  4.32469 8.9737e-05
-## ConditionS   -0.27531890625   0.03647832541 916.95600060131 -7.54747 1.0695e-13
+## (Intercept)   0.54103009375   0.12510253299  42.78260207006  4.32469 8.9737e-05
+## ConditionS   -0.27531890625   0.03647832541 916.95600056860 -7.54747 1.0695e-13
 ##                
 ## (Intercept) ***
 ## ConditionS  ***
@@ -940,14 +939,14 @@ print(summary_1, digits=10)</code></pre>
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
 ##  UID      (Intercept) 0.1910881575 0.4371363146
-##  ROI      (Intercept) 0.1286583232 0.3586897311
+##  ROI      (Intercept) 0.1286583233 0.3586897312
 ##  Residual             0.4069111382 0.6378958679
 ## Number of obs: 960, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                    Estimate      Std. Error              df  t value   Pr(&gt;|t|)
-## (Intercept)   0.47707000417   0.12346114474  42.99813621661  3.86413 0.00037115
-## ConditionS   -0.01165792083   0.04117600121 916.94195624029 -0.28312 0.77714557
+## (Intercept)   0.47707000417   0.12346114476  42.99813633283  3.86413 0.00037115
+## ConditionS   -0.01165792083   0.04117600121 916.94195627215 -0.28312 0.77714557
 ##                
 ## (Intercept) ***
 ## ConditionS     
@@ -985,15 +984,15 @@ print(summary_1, digits=10)</code></pre>
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.07404026085 0.2721034010
-##  ROI      (Intercept) 0.13663564053 0.3696425848
-##  Residual             0.45549003067 0.6749000153
+##  UID      (Intercept) 0.07404026086 0.2721034010
+##  ROI      (Intercept) 0.13663564045 0.3696425847
+##  Residual             0.45549003068 0.6749000153
 ## Number of obs: 960, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df t value
-## (Intercept)      0.26571118750   0.10423881455  36.37711513491 2.54906
-## VersionSpeeded   0.19970089583   0.04356460866 916.90654260466 4.58402
+## (Intercept)      0.26571118750   0.10423881453  36.37711512685 2.54906
+## VersionSpeeded   0.19970089583   0.04356460866 916.90654257157 4.58402
 ##                 Pr(&gt;|t|)    
 ## (Intercept)     0.015159 *  
 ## VersionSpeeded 5.193e-06 ***
@@ -1031,15 +1030,15 @@ print(summary_1, digits=10)</code></pre>
 ## 
 ## Random effects:
 ##  Groups   Name        Variance     Std.Dev.    
-##  UID      (Intercept) 0.1835071555 0.4283773517
-##  ROI      (Intercept) 0.1019222804 0.3192526904
+##  UID      (Intercept) 0.1835071555 0.4283773518
+##  ROI      (Intercept) 0.1019222804 0.3192526905
 ##  Residual             0.4253376491 0.6521791541
 ## Number of obs: 960, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df  t value
-## (Intercept)      0.54103009375   0.11674059105  42.66007663479  4.63446
-## VersionSpeeded  -0.06396008958   0.04209798338 916.93169676847 -1.51931
+## (Intercept)      0.54103009375   0.11674059105  42.66007659587  4.63446
+## VersionSpeeded  -0.06396008958   0.04209798338 916.93169667049 -1.51931
 ##                  Pr(&gt;|t|)    
 ## (Intercept)    3.3642e-05 ***
 ## VersionSpeeded    0.12903    
@@ -1073,19 +1072,19 @@ print(summary, digits=10)</code></pre>
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -4.3572047696 -0.5585669730  0.0257978375  0.5886771084  3.9915247319 
+## -4.3572047696 -0.5585669729  0.0257978375  0.5886771085  3.9915247318 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance      Std.Dev.    
 ##  UID      (Intercept) 0.06733419367 0.2594883305
-##  ROI      (Intercept) 0.01933699498 0.1390575240
+##  ROI      (Intercept) 0.01933699496 0.1390575239
 ##  Residual             0.18706411697 0.4325090947
 ## Number of obs: 960, groups:  UID, 24; ROI, 20
 ## 
 ## Fixed effects:
 ##                       Estimate      Std. Error              df  t value
-## (Intercept)     -0.27531889792   0.06451478949  38.61638306553 -4.26753
-## VersionSpeeded   0.26366096667   0.02791834201 916.89929060022  9.44401
+## (Intercept)     -0.27531889792   0.06451478948  38.61638318091 -4.26753
+## VersionSpeeded   0.26366096667   0.02791834201 916.89929055942  9.44401
 ##                  Pr(&gt;|t|)    
 ## (Intercept)     0.0001238 ***
 ## VersionSpeeded &lt; 2.22e-16 ***
@@ -1107,7 +1106,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-averaged-across-different-withinbetween-categories-condition-1participant" class="section level4">
 <h4>Effect size (averaged across different within/between categories) ~ condition + (1|participant)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/spatial_corr_lang.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; grepl(&quot;SpCorr&quot;, Version) &amp; Condition == &quot;within&quot;))
+data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot; &amp; grepl(&quot;SpCorr&quot;, Version) &amp; Condition == &quot;within&quot;))
 data$Version &lt;- factor(data$Version, levels = c(&quot;Standard SpCorr&quot;, &quot;Speeded SpCorr&quot;))
 lme &lt;- Coefficient ~ 1 + Version + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
@@ -1119,32 +1118,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    344.6    363.0   -167.3    334.6      283 
+##    262.1    279.5   -126.0    252.1      235 
 ## 
 ## Scaled residuals: 
-##           Min            1Q        Median            3Q           Max 
-## -2.9302462919 -0.6443641330  0.1218729840  0.6810004812  2.9139631415 
+##            Min             1Q         Median             3Q            Max 
+## -2.56793611066 -0.70429053795  0.07222008891  0.62556025564  2.34647366192 
 ## 
 ## Random effects:
-##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.06927658505 0.2632044548
-##  ROI      (Intercept) 0.03588594963 0.1894358721
-##  Residual             0.15287649819 0.3909942432
-## Number of obs: 288, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance       Std.Dev.     
+##  UID      (Intercept) 0.082684072198 0.28754838236
+##  ROI      (Intercept) 0.007721984427 0.08787482249
+##  Residual             0.134291987421 0.36645871176
+## Number of obs: 240, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                              Estimate      Std. Error              df t value
-## (Intercept)           8.811440903e-01 9.964516211e-02 1.270697995e+01 8.84282
-## VersionSpeeded SpCorr 5.453145833e-03 4.607911346e-02 2.588828665e+02 0.11834
+##                              Estimate      Std. Error              df  t value
+## (Intercept)             0.95519271667   0.07815795836  22.31026959276 12.22131
+## VersionSpeeded SpCorr   0.01070475833   0.04730961626 211.78759448422  0.22627
 ##                         Pr(&gt;|t|)    
-## (Intercept)           8.7121e-07 ***
-## VersionSpeeded SpCorr    0.90589    
+## (Intercept)           2.3165e-11 ***
+## VersionSpeeded SpCorr    0.82121    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## VrsnSpddSpC -0.231</code></pre>
+## VrsnSpddSpC -0.303</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Spcorr within localizer vs. between localizer versions, R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -1153,7 +1152,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-averaged-across-different-withinbetween-categories-condition-1participant-1" class="section level4">
 <h4>Effect size (averaged across different within/between categories) ~ condition + (1|participant)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/spatial_corr_lang.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; grepl(&quot;SpCorr&quot;, Version)))
+data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot; &amp; grepl(&quot;SpCorr&quot;, Version)))
 lme &lt;- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -1164,32 +1163,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##    415.4    435.7   -202.7    405.4      427 
+##    299.4    318.9   -144.7    289.4      355 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.3979982995 -0.6182399931  0.0705791073  0.6461682301  3.1934363647 
+## -2.8461718391 -0.6374763070  0.1053725086  0.6072085314  2.6653753062 
 ## 
 ## Random effects:
-##  Groups   Name        Variance      Std.Dev.    
-##  UID      (Intercept) 0.05882707357 0.2425429314
-##  ROI      (Intercept) 0.03268348794 0.1807857515
-##  Residual             0.12741163748 0.3569476677
-## Number of obs: 432, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance       Std.Dev.     
+##  UID      (Intercept) 0.073098154484 0.27036670373
+##  ROI      (Intercept) 0.007605449481 0.08720922819
+##  Residual             0.109153950413 0.33038454930
+## Number of obs: 360, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
-##                        Estimate      Std. Error              df t value
-## (Intercept)       0.79516500000   0.09371861658  12.95571939402 8.48460
-## Conditionwithin   0.08870566319   0.03643081878 402.92654216611 2.43491
+##                        Estimate      Std. Error              df  t value
+## (Intercept)       0.85850170000   0.07400312552  24.56613619245 11.60088
+## Conditionwithin   0.10204339583   0.03693811555 331.87134715795  2.76255
 ##                   Pr(&gt;|t|)    
-## (Intercept)     1.1964e-06 ***
-## Conditionwithin   0.015329 *  
+## (Intercept)     1.8561e-11 ***
+## Conditionwithin  0.0060548 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## Conditnwthn -0.259</code></pre>
+## Conditnwthn -0.333</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Spcorr within localizer vs. between localizer versions, R-Squared = &#39;,round(rsq_value[2], digits =4))
@@ -1289,7 +1288,7 @@ print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits
 <div id="effect-size-condition-version-1participant" class="section level4">
 <h4>Effect size ~ condition + version + (1|participant)</h4>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/spatial_corr_lang.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;70&quot;, Version)))
+data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;70&quot;, Version)))
 lme &lt;- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -1300,38 +1299,38 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   -613.5   -593.2    311.7   -623.5      427 
+##   -665.0   -645.6    337.5   -675.0      355 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -4.6388239202 -0.3303111663  0.1441053720  0.5226306860  3.4811442237 
+## -5.7340740750 -0.3097435184  0.1438270273  0.5482674285  2.2618870069 
 ## 
 ## Random effects:
-##  Groups   Name        Variance       Std.Dev.     
-##  UID      (Intercept) 0.003152264736 0.05614503305
-##  ROI      (Intercept) 0.003777503590 0.06146139918
-##  Residual             0.012056180237 0.10980063860
-## Number of obs: 432, groups:  UID, 24; ROI, 6
+##  Groups   Name        Variance        Std.Dev.     
+##  UID      (Intercept) 0.0034071670455 0.05837094350
+##  ROI      (Intercept) 0.0008714960904 0.02952111262
+##  Residual             0.0076303023698 0.08735160199
+## Number of obs: 360, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                        Estimate      Std. Error              df  t value
-## (Intercept)       0.76101681163   0.02906289334   9.67533933282 26.18517
-## Conditionwithin   0.01072340383   0.01120648075 402.92776466339  0.95689
-##                   Pr(&gt;|t|)    
-## (Intercept)     2.6251e-10 ***
-## Conditionwithin    0.33919    
+## (Intercept)     7.849621094e-01 1.948975025e-02 1.566750220e+01 40.27564
+## Conditionwithin 1.209164728e-02 9.766205999e-03 3.318701244e+02  1.23811
+##                 Pr(&gt;|t|)    
+## (Intercept)      &lt; 2e-16 ***
+## Conditionwithin  0.21655    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## Conditnwthn -0.257</code></pre>
+## Conditnwthn -0.334</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Dice within localizer vs. between localizer versions, R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/34Dice_70percent_averaged.tex&quot;)</code></pre>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/spatial_corr_lang.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;80&quot;, Version)))
+data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;80&quot;, Version)))
 lme &lt;- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -1342,38 +1341,38 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   -501.9   -481.5    255.9   -511.9      427 
+##   -583.4   -564.0    296.7   -593.4      355 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -4.1723485901 -0.4283638730  0.1598901910  0.5353860698  3.7238247862 
+## -4.6220681125 -0.3997209283  0.1247091167  0.5863595566  2.1073805633 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance       Std.Dev.     
-##  UID      (Intercept) 0.003794349116 0.06159828826
-##  ROI      (Intercept) 0.006016814337 0.07756812707
-##  Residual             0.015619802104 0.12497920669
-## Number of obs: 432, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.004198614260 0.06479671488
+##  ROI      (Intercept) 0.001337684709 0.03657437229
+##  Residual             0.009557622994 0.09776309628
+## Number of obs: 360, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                        Estimate      Std. Error              df  t value
-## (Intercept)       0.71980770628   0.03562823483   8.82962919712 20.20329
-## Conditionwithin   0.02239984594   0.01275563687 402.93856421934  1.75607
+## (Intercept)       0.74962053583   0.02285007792  13.77123035769 32.80604
+## Conditionwithin   0.02493622410   0.01093024645 331.88232376910  2.28140
 ##                   Pr(&gt;|t|)    
-## (Intercept)     1.0696e-08 ***
-## Conditionwithin   0.079835 .  
+## (Intercept)     1.7986e-14 ***
+## Conditionwithin   0.023158 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## Conditnwthn -0.239</code></pre>
+## Conditnwthn -0.319</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Dice within localizer vs. between localizer versions, R-Squared = &#39;,round(rsq_value[2], digits =4))
 print(xtable(summary[[&quot;coefficients&quot;]], caption = caption_text, digits = 3), caption.placement = &quot;top&quot;, table.placement= &quot;!htb&quot;, file = &quot;latex_tables/34Dice_80percent_averaged.tex&quot;)</code></pre>
 <pre class="r"><code>data &lt;- read.csv(&quot;../data/spatial_corr_lang.csv&quot;, header=TRUE)
-data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;90&quot;, Version)))
+data &lt;- subset(data, (Hemisphere == &quot;LH&quot; &amp; ROI != &quot;LAngG&quot; &amp; grepl(&quot;Dice&quot;, Version) &amp; grepl(&quot;90&quot;, Version)))
 lme &lt;- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 &lt;- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -1384,32 +1383,32 @@ print(summary, digits=10)</code></pre>
 ##    Data: data
 ## 
 ##      AIC      BIC   logLik deviance df.resid 
-##   -319.2   -298.9    164.6   -329.2      427 
+##   -397.1   -377.7    203.6   -407.1      355 
 ## 
 ## Scaled residuals: 
 ##           Min            1Q        Median            3Q           Max 
-## -3.7914995051 -0.5112927273  0.1648723089  0.5800460376  3.1228262889 
+## -4.5701373345 -0.4654716137  0.1418358601  0.6039780372  2.0923548183 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance       Std.Dev.     
-##  UID      (Intercept) 0.005033814526 0.07094938002
-##  ROI      (Intercept) 0.011988251788 0.10949087537
-##  Residual             0.023900724570 0.15459859175
-## Number of obs: 432, groups:  UID, 24; ROI, 6
+##  UID      (Intercept) 0.005992624711 0.07741204500
+##  ROI      (Intercept) 0.002018663728 0.04492954182
+##  Residual             0.016213535795 0.12733238314
+## Number of obs: 360, groups:  UID, 24; ROI, 5
 ## 
 ## Fixed effects:
 ##                        Estimate      Std. Error              df  t value
-## (Intercept)       0.64903252364   0.04872126323   7.96264435165 13.32134
-## Conditionwithin   0.03800818994   0.01577865270 402.95042453030  2.40884
+## (Intercept)       0.68872689796   0.02808092307  13.61720697429 24.52650
+## Conditionwithin   0.04685651882   0.01423619322 331.86649894793  3.29137
 ##                   Pr(&gt;|t|)    
-## (Intercept)     1.0059e-06 ***
-## Conditionwithin   0.016451 *  
+## (Intercept)     1.1576e-12 ***
+## Conditionwithin  0.0011043 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Correlation of Fixed Effects:
 ##             (Intr)
-## Conditnwthn -0.216</code></pre>
+## Conditnwthn -0.338</code></pre>
 <pre class="r"><code>rsq_value = r.squaredGLMM(model_1)
 
 caption_text = paste(&#39;Dice within localizer vs. between localizer versions, R-Squared = &#39;,round(rsq_value[2], digits =4))

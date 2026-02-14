@@ -3,6 +3,7 @@
 #       group by langloc version, catergorized by condition (S vs. N)
 #   Plot average effect across system
 
+import argparse
 import typing
 import matplotlib
 import matplotlib.pyplot as plt
@@ -100,20 +101,25 @@ def plot_ROI_effectsize(
     df: pd.DataFrame,
     network: str = "lang",
     contrast: str = "S-N",
-    title_str: str = "Standard versus speeded langloc across LH lang fROIs",
-    save_str: str = "n=?",
+    title_str: str = "",
+    save_str: str = "",
     hemi: str = "LH",
     save: bool = True,
 ) -> None:
     """
     For each ROI, plots the standard and speeded effect sizes for both sentences and non-words within the specified (functionally localized) `network`
     """
+    print("######################################################################")
+    print(f"###### PLOTTING ROI EFFECT SIZE FOR {network} {hemi} {contrast} ######")
+    print("######################################################################")
 
     df_S_N = df.copy()
     contrasts_of_interest = contrast.split("-")
     df_S_N = df_S_N.loc[df_S_N["Condition"] != contrast]
 
-    if network == "MD" and contrast == "H-E":
+    if (network == "MD" and contrast == "H-E") or (
+        network == "dmn" and contrast == "E-H"
+    ):
         version_cond_order = contrasts_of_interest
     else:
         version_cond_order = [
@@ -145,10 +151,25 @@ def plot_ROI_effectsize(
         rows = 4
         cols = 5
         fig, axs = plt.subplots(rows, cols, figsize=(34, 16), sharey=True)
+    elif network == "dmn":
+        rows = 3
+        cols = 4
+        fig, axs = plt.subplots(rows, cols, figsize=(28, 14), sharey=True)
+    elif network == "extendedLang":
+        rows = 4
+        cols = 7
+        fig, axs = plt.subplots(rows, cols, figsize=(52, 24))
+    else:
+        raise Exception(f"Network {network} not supported")
 
     for roi_idx, roi in enumerate(
-        D_ROI_ORDER[folder]
+        [
+            roi_name for roi_name in D_ROI_ORDER[folder] if roi_name
+        ]  # Extended lang parcel exclude ROI 9
     ):  # iterate over ROIs in intended order
+
+        if network == "lang" and "AngG" in roi:  # exclude AngG from analysis
+            continue
         df_grouped_preagg = df_S_N.loc[df_S_N["ROI"] == roi]
         df_plot = df_grouped.loc[df_grouped["ROI"] == roi]
 
@@ -188,28 +209,35 @@ def plot_avg_effectsize(
     df: pd.DataFrame,
     network: str = "lang",
     contrast: str = "S-N",
-    title_str: str = "Standard versus speeded langloc, mean across LH lang fROIs",
-    save_str: str = "n=?",
+    title_str: str = "",
+    save_str: str = "",
     hemi: str = "LH",
     save: bool = True,
 ) -> None:
     """
     Plots the standard and speeded effect sizes for both sentences and non-words averaged across ROIs within the specified (functionally localized) `network`
     """
+    print("######################################################################")
+    print(f"###### PLOTTING AVG EFFECT SIZE FOR {network} {hemi} {contrast} ######")
+    print("######################################################################")
     df = df.copy()
 
     # set Version_Condition to contain both the language localizer version (standard vs speeded) and the localizer condition (sentence vs nonword)
     # For MD, average LH and RH separately
     contrasts = contrast.split("-")
     connect_subj_points = False
-    if network == "lang":
+    if network == "lang" or network == "extendedLang":
         version_cond_order = [
             f"Standard_{contrasts[0]}",
             f"Standard_{contrasts[1]}",
             f"Speeded_{contrasts[0]}",
             f"Speeded_{contrasts[1]}",
         ]
-    if network == "MD" and contrast == "S-N":
+        df = df.loc[
+            ~df["ROI"].isnull()
+        ]  # exclude null ROIs (extendedLang excludes parcel 9)
+        df = df.loc[~df["ROI"].str.contains("AngG")]  # exclude AngG from analysis
+    elif (network == "MD" or network == "dmn") and contrast == "S-N":
         if hemi is None:
             version_cond_order = [
                 f"Standard_{contrasts[0]}",
@@ -229,7 +257,9 @@ def plot_avg_effectsize(
             save_str += f"_{hemi}"
             connect_subj_points = True
 
-    if network == "MD" and contrast == "H-E":
+    elif (network == "MD" and contrast == "H-E") or (
+        network == "dmn" and contrast == "E-H"
+    ):
         version_cond_order = [
             f"{contrasts[0]}_LH",
             f"{contrasts[1]}_LH",
@@ -239,9 +269,50 @@ def plot_avg_effectsize(
 
         df["Version_Condition"] = df["Version_Condition"] + "_" + df["Hemisphere"]
 
+    else:
+        raise Exception(f"Network {network} not supported")
+
     # Get the mean sentence and nonword effect sizes value across ROIs for each subject for both the standard and speeded versions of the localizer task
     df_subjectwise = df.groupby(["Version_Condition", "UID"]).mean()
     df_subjectwise = df_subjectwise.reset_index()
+
+    # Compare H and E for standard and speeded
+    if network == "lang" and contrast == "H-E":
+
+        for version_condition in df["Version_Condition"].unique():
+            t_stat, p = ttest_1samp(
+                df_subjectwise[
+                    df_subjectwise["Version_Condition"] == version_condition
+                ]["EffectSize"],
+                0,
+            )
+            print(
+                f"T-test for comparing to baseline (0) for {hemi} {network} {version_condition} n={len(df_subjectwise[df_subjectwise['Version_Condition'] == version_condition])}: t={t_stat}, p={p}"
+            )
+
+        t_stat, p = ttest_ind(
+            df_subjectwise.loc[df_subjectwise["Version_Condition"] == f"Standard_H"][
+                "EffectSize"
+            ],
+            df_subjectwise.loc[df_subjectwise["Version_Condition"] == f"Standard_E"][
+                "EffectSize"
+            ],
+        )
+        print(
+            f"ttest t-stat for Standard H-E {_get_folder(network, hemi)}: {t_stat}, p: {p}"
+        )
+
+        t_stat, p = ttest_ind(
+            df_subjectwise.loc[df_subjectwise["Version_Condition"] == f"Speeded_H"][
+                "EffectSize"
+            ],
+            df_subjectwise.loc[df_subjectwise["Version_Condition"] == f"Speeded_E"][
+                "EffectSize"
+            ],
+        )
+        print(
+            f"ttest t-stat for Speeded H-E {_get_folder(network, hemi)}: {t_stat}, p: {p}"
+        )
 
     # Obtain mean, sem, count statistics of the effect size across subjects
     df_mean = (
@@ -294,9 +365,14 @@ def plot_contrast_effectsize(
 
     # set Version_Condition to contain the localizer condition (sentence vs nonword)
     # For MD, average LH and RH separately
-    if network == "lang":
+    if network == "lang" or network == "extendedLang":
         version_cond_order = [f"Standard_{contrast}", f"Speeded_{contrast}"]
-    if network == "MD" and contrast == "S-N":
+
+        df = df.loc[
+            ~df["ROI"].isnull()
+        ]  # exclude null ROIs (extendedLang excludes parcel 9)
+        df = df.loc[~df["ROI"].str.contains("AngG")]  # exclude AngG from analysis
+    elif (network == "MD" or network == "dmn") and contrast == "S-N":
         version_cond_order = [
             f"Standard_{contrast}_LH",
             f"Standard_{contrast}_RH",
@@ -304,9 +380,13 @@ def plot_contrast_effectsize(
             f"Speeded_{contrast}_RH",
         ]
         df["Version_Condition"] = df["Version_Condition"] + "_" + df["Hemisphere"]
-    if network == "MD" and contrast == "H-E":
+    elif (network == "MD" and contrast == "H-E") or (
+        network == "dmn" and contrast == "E-H"
+    ):
         version_cond_order = [f"{contrast}_LH", f"{contrast}_RH"]
         df["Version_Condition"] = df["Version_Condition"] + "_" + df["Hemisphere"]
+    else:
+        raise Exception(f"Network {network} not supported")
 
     df_SN = df.copy()
     df_SN = df_SN.loc[df_SN["Condition"] == contrast]
@@ -335,19 +415,9 @@ def plot_contrast_effectsize(
                 df_subjectwise["Version_Condition"] == f"Speeded_{contrast}"
             ]["EffectSize"],
         )
-        print(f"ttest t-stat for {_get_folder(network, hemi)}: {t_stat}, p: {p}")
-
-    if network == "lang" and contrast == "H-E":
-        for version_condition in df_SN["Version_Condition"].unique():
-            t_stat, p = ttest_1samp(
-                df_subjectwise[
-                    df_subjectwise["Version_Condition"] == version_condition
-                ]["EffectSize"],
-                0,
-            )
-            print(
-                f"T-test for comparing hard to baseline (0) and Easy to baseline (0) for {network} {version_condition}: t={t_stat}, p={p}"
-            )
+        print(
+            f"ttest t-stat for {contrast} (standard vs. speeded) {_get_folder(network, hemi)}: {t_stat}, p: {p}"
+        )
 
     fig, ax = plt.subplots(figsize=(8, 5))
     _make_bargraph(
@@ -529,6 +599,118 @@ if __name__ == "__main__":
     )
     plot_contrast_effectsize(
         df_MD,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+
+    ###### PLOT DMN Network ######
+    network = "dmn"
+    contrast = "S-N"
+
+    df_dmn = load_csvs(network, contrast, None)
+    title_str_roi = f"Standard vs. speeded language localizer effect size across DMN fROIs, n={len(np.unique(list(df_dmn.UID)))}"
+    save_str_roi = f"n={len(np.unique(list(df_dmn.UID)))}"
+    title_str_mean = f"Standard vs. speeded language localizer effect size, mean across DMN fROIs, n={len(np.unique(list(df_dmn.UID)))}"
+    save_str_mean = f"n={len(np.unique(list(df_dmn.UID)))}"
+
+    plot_ROI_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_roi,
+        save_str=save_str_roi,
+        hemi=None,
+        save=True,
+    )
+    plot_avg_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+    plot_contrast_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+
+    contrast = "E-H"
+    df_dmn = load_csvs(network, contrast, None)
+
+    title_str_roi = f"Easy vs. hard SpatialFIN effect size across DMN fROIs, n={len(np.unique(list(df_dmn.UID)))}"
+    save_str_roi = f"n={len(np.unique(list(df_dmn.UID)))}"
+    title_str_mean = f"Easy vs. hard SpatialFIN effect size, mean across DMN fROIs, n={len(np.unique(list(df_dmn.UID)))}"
+    save_str_mean = f"n={len(np.unique(list(df_dmn.UID)))}"
+
+    plot_ROI_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_roi,
+        save_str=save_str_roi,
+        hemi=None,
+        save=True,
+    )
+    plot_avg_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+    plot_contrast_effectsize(
+        df_dmn,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+
+    ###### PLOT Extended Lang Network ######
+    network = "extendedLang"
+    contrast = "S-N"
+
+    df_extendedLang = load_csvs(network, contrast, None)
+    title_str_roi = f"Standard vs. speeded language localizer effect size across Extended Lang fROIs, n={len(np.unique(list(df_extendedLang.UID)))}"
+    save_str_roi = f"n={len(np.unique(list(df_extendedLang.UID)))}"
+    title_str_mean = f"Standard vs. speeded language localizer effect size, mean across Extended Lang fROIs, n={len(np.unique(list(df_extendedLang.UID)))}"
+    save_str_mean = f"n={len(np.unique(list(df_extendedLang.UID)))}"
+
+    plot_ROI_effectsize(
+        df_extendedLang,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_roi,
+        save_str=save_str_roi,
+        hemi=None,
+        save=True,
+    )
+    plot_avg_effectsize(
+        df_extendedLang,
+        network=network,
+        contrast=contrast,
+        title_str=title_str_mean,
+        save_str=save_str_mean,
+        hemi=None,
+        save=True,
+    )
+    plot_contrast_effectsize(
+        df_extendedLang,
         network=network,
         contrast=contrast,
         title_str=title_str_mean,

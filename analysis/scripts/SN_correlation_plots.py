@@ -14,7 +14,7 @@ matplotlib.rcParams["ps.fonttype"] = 42
 matplotlib.rcParams["svg.fonttype"] = "none"
 sns.set_style("whitegrid")
 
-EXCLUDE_SPEEDED = ["870_FED_20220218c_3T1_PL2017"]  # outlier participant
+EXCLUDE_SPEEDED = [870]  # outlier participant
 
 
 def get_dataframe_even_odd(exclude_outlier: bool = False) -> pd.DataFrame:
@@ -22,17 +22,18 @@ def get_dataframe_even_odd(exclude_outlier: bool = False) -> pd.DataFrame:
     :param exclude_outlier whether to exclude the outlier
     :return the loaded dataframe of response values
     """
-    df = pd.read_csv(join(DATADIR, "mROI_lang_S-N_evenodd.csv"))
+    df = pd.read_csv(join(DATADIR, "mROI_lang_S-N_evenodd.csv"), index_col=0)
     df = df.loc[df.Hemisphere == "LH"]
+    df = df.loc[~df.ROI.str.contains("AngG")]
 
     if exclude_outlier:
-        df = df.loc[~df["Subject"].isin(EXCLUDE_SPEEDED)]
+        df = df.loc[~df["UID"].isin(EXCLUDE_SPEEDED)]
 
     return df
 
 
 def plot_even_odd_corr(
-    df_roi: pd.DataFrame, ax: "plt.Axes", lim: typing.List[int, int]
+    df_roi: pd.DataFrame, ax: "plt.Axes", lim: typing.List[int]
 ) -> float:
     """
     :param df_roi the dataframe of response values to plot
@@ -54,7 +55,7 @@ def plot_even_odd_corr(
         transform=ax.transAxes,
         fontsize=8,
     )
-    return pearsonr
+    return pearsonr, p
 
 
 def plot_even_odd_corr_all_ROIs(
@@ -86,15 +87,16 @@ def plot_even_odd_corr_all_ROIs(
         pearson_r_values = []
         for c, roi in enumerate(ROIs):
             df_roi = df.loc[df["ROI"] == roi]
-            pearsonr = plot_even_odd_corr(df_roi, axes[r, c + 1], lim)
+            pearsonr, p = plot_even_odd_corr(df_roi, axes[r, c + 1], lim)  # plot correlation across even/odd runs for each ROI
             pearson_r_values.append(pearsonr)
+            print(f"Pearson r={pearsonr:.2f} for {roi} in {'Standard' if r == 0 else 'Speeded'} runs, p={p:.2g}")
         if r == 0:
             print(
-                f"Standard mean pearsonr: {np.mean(pearson_r_values)}, median: {np.median(pearson_r_values)}, std: {np.std(pearson_r_values, ddof=1)}"
+                f"Standard mean pearsonr standard: {np.mean(pearson_r_values)}, median: {np.median(pearson_r_values)}, std: {np.std(pearson_r_values, ddof=1)}"
             )
         elif r == 1:
             print(
-                f"Speeded mean pearsonr: {np.mean(pearson_r_values)}, median: {np.median(pearson_r_values)}, std: {np.std(pearson_r_values, ddof=1)}"
+                f"Speeded mean pearsonr speeded: {np.mean(pearson_r_values)}, median: {np.median(pearson_r_values)}, std: {np.std(pearson_r_values, ddof=1)}"
             )
 
     for ax, col in zip(axes[0], ["LH_Lang"] + list(ROIs)):
@@ -103,6 +105,7 @@ def plot_even_odd_corr_all_ROIs(
     for ax, row in zip(axes[:, 0], ["Standard", "Speeded"]):
         ax.set_ylabel(row, size="large")
 
+    # plot average correlation across all ROIs across even/odd runs
     plot_even_odd_corr_avg(df_standard, df_speeded, axes[:, 0], lim)
 
     fig.supxlabel("Odd Run Effect Size", fontsize=14, x=0.5, y=0.01)
@@ -125,21 +128,17 @@ def plot_even_odd_corr_all_ROIs(
 
 def plot_even_odd_corr_avg(df_standard, df_speeded, axes, lim):
     """
-    Plots thec correlation between even and odd runs of the standard and speeded localizers
+    Plots the correlation between even and odd runs of the standard and speeded localizers
     """
     for r in range(2):
         df = df_standard if r == 0 else df_speeded
-        df = df.groupby("Subject").mean()
+        df = df.groupby("UID").mean()
         plot_even_odd_corr(df, axes[r], lim)
 
 
 def main():
     for exclude_outlier in [True, False]:
-        df = get_dataframe_even_odd(exclude_outlier)
-        df_standard = df.loc[df.Version == "Standard"]
-        df_speeded = df.loc[df.Version == "Speeded"]
-        plot_even_odd_corr_all_ROIs(df_standard, df_speeded, exclude_outlier)
-
+        print(f"*** excluding outlier participant: {exclude_outlier} ***")
         df = get_dataframe_even_odd(exclude_outlier)
         df_standard = df.loc[df.Version == "Standard"]
         df_speeded = df.loc[df.Version == "Speeded"]

@@ -12,7 +12,6 @@ import nibabel as nib
 
 from constants import (
     FIRSTLEVELDIR,
-    FL_CONTRAST,
     ROIDIR,
     D_ROI_ORDER,
     UID_LIST,

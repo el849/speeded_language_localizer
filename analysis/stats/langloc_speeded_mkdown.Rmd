@@ -20,7 +20,7 @@ options(xtable.floating = TRUE)
 #### Effect size ~ condition + version + (1|participant) + (1|fROI) 
 ```{r Fig 1 (a)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition != "S-N" & Hemisphere == "LH"))
+data <- subset(data, (Condition != "S-N" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
@@ -53,7 +53,7 @@ lme4:::anova.merMod(model_1, model_2)
 #### Effect size delta ~  version + (1|participant) + (1|fROI)
 ```{r Fig 1 (c)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition == "S-N" & Hemisphere == "LH"))
+data <- subset(data, (Condition == "S-N" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -71,7 +71,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r Fig 1 (d)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition =="S" & Hemisphere == "LH"))
+data <- subset(data, (Condition =="S" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -88,7 +88,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r Fig 1 (e)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition =="N" & Hemisphere == "LH"))
+data <- subset(data, (Condition =="N" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -107,7 +107,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r Fig 2 (C-D pt2)}
 data <- read.csv("../data/mROI_lang_H-E.csv", header=TRUE)
-data <- subset(data, (Condition =="H" & Hemisphere == "LH"))
+data <- subset(data, (Condition =="H" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -124,7 +124,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r Fig 2 (C-D pt3)}
 data <- read.csv("../data/mROI_lang_H-E.csv", header=TRUE)
-data <- subset(data, (Condition =="E" & Hemisphere == "LH"))
+data <- subset(data, (Condition =="E" & Hemisphere == "LH" & ROI != "LAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -142,7 +142,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 #### Effect size ~ condition + version + (1|participant) + (1|fROI) 
 ```{r SI 1B (a)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition != "S-N" & Hemisphere == "RH"))
+data <- subset(data, (Condition != "S-N" & Hemisphere == "RH" & ROI != "RAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Condition + Version + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
@@ -175,7 +175,7 @@ lme4:::anova.merMod(model_1, model_2)
 #### Effect size delta ~  version + (1|participant) + (1|fROI)
 ```{r SI 1B (c)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition == "S-N" & Hemisphere == "RH"))
+data <- subset(data, (Condition == "S-N" & Hemisphere == "RH" & ROI != "RAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -193,7 +193,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 ```{r SI 1B (d)}
 
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition == "S" & Hemisphere == "RH"))
+data <- subset(data, (Condition == "S" & Hemisphere == "RH" & ROI != "RAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -210,7 +210,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r SI 1B (e)}
 data <- read.csv("../data/mROI_lang_S-N.csv", header=TRUE)
-data <- subset(data, (Condition == "N" & Hemisphere == "RH"))
+data <- subset(data, (Condition == "N" & Hemisphere == "RH" & ROI != "RAngG"))
 data$Version <- factor(data$Version, levels = c("Standard", "Speeded"))
 lme <- EffectSize ~ 1 + Version + (1|UID) + (1|ROI)
 model <- lmer(lme, data=data, REML=FALSE)
@@ -346,7 +346,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 #### Effect size (averaged across different within/between categories) ~ condition + (1|participant)
 ```{r spcorr }
 data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
-data <- subset(data, (Hemisphere == "LH" & grepl("SpCorr", Version) & Condition == "within"))
+data <- subset(data, (Hemisphere == "LH" & ROI != "LAngG" & grepl("SpCorr", Version) & Condition == "within"))
 data$Version <- factor(data$Version, levels = c("Standard SpCorr", "Speeded SpCorr"))
 lme <- Coefficient ~ 1 + Version + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
@@ -362,7 +362,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 #### Effect size (averaged across different within/between categories) ~ condition + (1|participant)
 ```{r spcorr averaged}
 data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
-data <- subset(data, (Hemisphere == "LH" & grepl("SpCorr", Version)))
+data <- subset(data, (Hemisphere == "LH" & ROI != "LAngG" & grepl("SpCorr", Version)))
 lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -410,7 +410,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r dice70_averaged}
 data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
-data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("70", Version)))
+data <- subset(data, (Hemisphere == "LH" & ROI != "LAngG" & grepl("Dice", Version) & grepl("70", Version)))
 lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -425,7 +425,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r dice80_averaged}
 data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
-data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("80", Version)))
+data <- subset(data, (Hemisphere == "LH" & ROI != "LAngG" & grepl("Dice", Version) & grepl("80", Version)))
 lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)
@@ -439,7 +439,7 @@ print(xtable(summary[["coefficients"]], caption = caption_text, digits = 3), cap
 
 ```{r dice90_averaged}
 data <- read.csv("../data/spatial_corr_lang.csv", header=TRUE)
-data <- subset(data, (Hemisphere == "LH" & grepl("Dice", Version) & grepl("90", Version)))
+data <- subset(data, (Hemisphere == "LH" & ROI != "LAngG" & grepl("Dice", Version) & grepl("90", Version)))
 lme <- Coefficient ~ 1 + Condition + (1|UID) + (1|ROI)
 model_1 <- lmer(lme, data=data, REML=FALSE)
 summary = summary(model_1)

@@ -13,6 +13,7 @@ df = pd.read_csv(
     f"{DATADIR}/repeated_sessions_LH_lang.csv",
     index_col=0,
 )
+df = df[~df["ROI"].str.contains("AngG")]  # exclude AngG from analysis
 df = df.groupby(["Session", "Effect", "Version"]).agg("mean").reset_index()
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -79,7 +80,7 @@ for sub_num, subj in enumerate(subIDs):
     for i in range(len(grouped)):
         axes[sub_num].text(
             all_bars[i * 4 + 2].get_x(),
-            4.1,
+            5.1,
             f"SESSION {i+1}",
             ha="left",
             va="bottom",
@@ -89,7 +90,7 @@ for sub_num, subj in enumerate(subIDs):
     axes[sub_num].yaxis.grid(alpha=0.4, zorder=0)
 
     axes[sub_num].set_ylabel("BOLD response", fontsize=14)
-    axes[sub_num].set_ylim([-0.5, 4.5])
+    axes[sub_num].set_ylim([-0.5, 5.5])
     axes[sub_num].set_title(
         f"Responses to sentences and nonwords\nmean of LH fROIs for three sessions in participant {subj}",
         fontsize=14,

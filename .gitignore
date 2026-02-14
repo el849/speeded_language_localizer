@@ -28,6 +28,7 @@ share/python-wheels/
 MANIFEST
 
 analysis/data/
+analysis/plots/
 analysis/dice_results/
 
 # PyInstaller

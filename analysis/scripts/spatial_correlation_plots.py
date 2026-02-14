@@ -8,6 +8,7 @@ import numpy as np
 from datetime import datetime
 import os
 from os.path import join
+from scipy.stats import ttest_rel
 from constants import D_COLOR_COND, DATADIR, PLOTDIR
 
 
@@ -165,6 +166,22 @@ def _make_bargraph(
     ax[0].yaxis.set_tick_params(labelsize=18)
     ax[1].yaxis.set_tick_params(labelsize=18)
 
+    # Perform t-test between each pair of conditions in version_cond_order
+    for i in range(len(version_cond_order) - 1):
+        for j in range(i + 1, len(version_cond_order)):
+            cond1 = list(version_cond_order.keys())[i]
+            cond2 = list(version_cond_order.keys())[j]
+            data1 = df_subjectwise.loc[df_subjectwise["Version"] == cond1][
+                ("Coefficient")
+            ].values
+            data2 = df_subjectwise.loc[df_subjectwise["Version"] == cond2][
+                ("Coefficient")
+            ].values
+            t_stat, p_value = ttest_rel(data1, data2)
+            print(
+                f"T-test between {cond1} and {cond2}: t-statistic = {t_stat:.4f}, p-value = {p_value:.4f}"
+            )
+
 
 def plot_avg_effectsize(
     df: pd.DataFrame,
@@ -178,6 +195,9 @@ def plot_avg_effectsize(
     print("*" * 40, network, hemi, "*" * 40)
     df = df.copy()
     df = df.loc[df.Hemisphere == hemi]
+
+    if network == "lang":
+        df = df.loc[~df.ROI.str.contains("AngG")]  # exclude AngG from analysis
 
     ## POOL MANUAL APPROACH ##
     df_subjectwise = df.groupby(["Version", "UID"]).mean().reset_index()
@@ -307,6 +327,9 @@ def plot_avg_effectsize_dice_si(
     print("*" * 80)
     df = df.copy()
     df = df.loc[df.Hemisphere == hemi]
+
+    if network == "lang":
+        df = df.loc[~df.ROI.str.contains("AngG")]  # exclude AngG from analysis
 
     ## POOL MANUAL APPROACH ##
     df_subjectwise = df.groupby(["Version", "UID"]).mean().reset_index()
